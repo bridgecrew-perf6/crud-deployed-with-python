@@ -33,7 +33,9 @@ contract Storage {
 	//add to array
 	function addPeople (uint256 favoriteNumber, string memory _name) public {
 		people.push(People(_favoriteNumber, _name));
- 		nameToFavoriteNumber[_name] =_favoriteNumber
+ 		nameToFavoriteNumber[_name] =_favoriteNumber;
+
+		
 	}
 }
 
