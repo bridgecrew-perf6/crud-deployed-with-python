@@ -73,4 +73,34 @@ signedTransaction = w3.eth.account.sign_transaction(transaction, private_key=PRI
 
 print("Deploying the contract")
 #sending the signed transaction
-TnxHash = w3.eth.send_raw_transaction(signedTransaction.rawTransaction)
+#and waiting for block confirmation
+tnxHash = w3.eth.send_raw_transaction(signedTransaction.rawTransaction)
+tnxReceipt = w3.eth.wait_for_transaction(tnxHash)
+
+
+
+
+#Interacting with the contract
+#getting the contract
+crud =w3.eth.contract(address = tnxReceipt.contractAddress, abi = abi)
+
+
+#performing transactions
+#calling the retrieve function
+print(crud.function.retrieve().call())
+
+#calling the Store function
+
+storeFunction = crud.function.retrieve().buildTransaction({
+    'chainId' : CHAIN_ID,
+    'gasPrice' : w3.eth.gas_price,
+    'from' :MY_ADDRESS,
+    'nonce' : nonce + 1
+    })
+
+# signing the transaction
+signedStoredTnx = w3.eth.account.send_raw_transaction(storeFunction, private_key =PRIVATE_KEY)
+
+#sending the transaction
+storeTnxHash = w3.eth.send_raw_transaction(signedStoredTnx.rawTransaction)
+storeTnsReceipt = w3.eth.wait_for_transaction(storeTnxHash)

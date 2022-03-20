@@ -18,9 +18,10 @@ contract Storage {
 	mapping( string => uint256) public nameToFavoriteNumber;
 
 	//store
-	function store(uint256 _favoriteNumber) public{
+	function store(uint256 _favoriteNumber) public returns(uint256){
 
 		favoriteNumber = _favoriteNumber;
+		return _favoriteNumber;
 	}
 
 	//get 
