@@ -66,7 +66,7 @@ transaction  = Storage.constructor().buildTransaction({
 
 
 #signing the transaction
-signedTransaction = w3.eth.sign_transaction(transaction, PRIVATE_KEY)
+signedTransaction = w3.eth.account.sign_transaction(transaction, private_key=PRIVATE_KEY)
 
 #using os method
 #PRIVATE_KEY = os.getenv('PRIVATE_KEY')
