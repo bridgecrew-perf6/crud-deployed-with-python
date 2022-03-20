@@ -45,7 +45,7 @@ abi =compiled_sol['contracts']['Storage.sol']['Storage']['abi']
 #connecting to ganache
 w3 = Web3(Web3.HTTPProvider('http://0.0.0.0:8545'))
 CHAIN_ID = 1337
-MY_ADDRESS = "0x6Feed4d8593291B1d10146A3947213B89d367d5F"
+MY_ADDRESS = "0xCa7f2A4803e33405Ea85b6Ce356BfCeE46092675"
 #using os method
 PRIVATE_KEY = os.getenv('PRIVATE_KEY')
 print(PRIVATE_KEY)
