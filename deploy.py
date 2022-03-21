@@ -43,12 +43,19 @@ abi =compiled_sol['contracts']['Storage.sol']['Storage']['abi']
 #print(abi)
 
 #connecting to ganache
-w3 = Web3(Web3.HTTPProvider('http://0.0.0.0:8545'))
-CHAIN_ID = 1337
-MY_ADDRESS = "0xCa7f2A4803e33405Ea85b6Ce356BfCeE46092675"
+#w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
+#CHAIN_ID = 1337
+#MY_ADDRESS = "0x0B86282ee0a574d7139CF5d266F8334e81F7f255"
 #using os method
+#PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+
+
+#connecting with testnet
+
+w3 =Web3(Web3.HTTPProvider('https://rinkeby.infura.io/v3/ada96dd7a4464e10973a9520c244264c'))
+CHAIN_ID = 4
+MY_ADDRESS = '0x717d560331f7affC8d8FC2355BD1cddd89b97DF1'
 PRIVATE_KEY = os.getenv('PRIVATE_KEY')
-print(PRIVATE_KEY)
 
 #creating the contract in python
 Storage = w3.eth.contract(abi=abi, bytecode=bytecode)
@@ -71,27 +78,28 @@ signedTransaction = w3.eth.account.sign_transaction(transaction, private_key=PRI
 #using os method
 #PRIVATE_KEY = os.getenv('PRIVATE_KEY')
 
-print("Deploying the contract")
+print("Deploying the contract ...")
 #sending the signed transaction
 #and waiting for block confirmation
 tnxHash = w3.eth.send_raw_transaction(signedTransaction.rawTransaction)
-tnxReceipt = w3.eth.wait_for_transaction(tnxHash)
-
+print('Waiting for block confirmation')
+tnxReceipt = w3.eth.wait_for_transaction_receipt(tnxHash)
+print(f"Done! Transaction Reciept = {tnxReceipt.contractAddress}:")
 
 
 
 #Interacting with the contract
 #getting the contract
-crud =w3.eth.contract(address = tnxReceipt.contractAddress, abi = abi)
+crud = w3.eth.contract(address = tnxReceipt.contractAddress, abi = abi)
 
 
 #performing transactions
 #calling the retrieve function
-print(crud.function.retrieve().call())
+print(crud.functions.retrieve().call())
 
 #calling the Store function
-
-storeFunction = crud.function.retrieve().buildTransaction({
+print('Updating the contract ...')
+storeFunction = crud.functions.store(15).buildTransaction({
     'chainId' : CHAIN_ID,
     'gasPrice' : w3.eth.gas_price,
     'from' :MY_ADDRESS,
@@ -99,8 +107,12 @@ storeFunction = crud.function.retrieve().buildTransaction({
     })
 
 # signing the transaction
-signedStoredTnx = w3.eth.account.send_raw_transaction(storeFunction, private_key =PRIVATE_KEY)
+signedStoredTnx = w3.eth.account.sign_transaction(storeFunction, private_key =PRIVATE_KEY)
 
 #sending the transaction
+#print('Updating calling store function')
 storeTnxHash = w3.eth.send_raw_transaction(signedStoredTnx.rawTransaction)
-storeTnsReceipt = w3.eth.wait_for_transaction(storeTnxHash)
+
+print('Waiting for block confirmation')
+storeTnxReceipt = w3.eth.wait_for_transaction_receipt(storeTnxHash)
+print('Done')

@@ -1,4 +1,4 @@
-//SPDX-License-Identifier :MIT
+//SPDX-License-Identifier : MIT
 
 pragma solidity ^0.8.0;
 
@@ -25,7 +25,7 @@ contract Storage {
 	}
 
 	//get 
-	function retrive() public view  returns(uint256){
+	function retrieve() public view returns (uint256){
 		return favoriteNumber;
 
 	}
